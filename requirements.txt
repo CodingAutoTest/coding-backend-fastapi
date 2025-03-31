@@ -1,0 +1,9 @@
+fastapi
+"uvicorn[standard]"
+sqlalchemy
+aiomysql
+python-dotenv
+pydantic
+alembic
+"pydantic[email]"
+greenlet
