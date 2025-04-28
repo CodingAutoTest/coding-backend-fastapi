@@ -1,13 +1,10 @@
 from fastapi import FastAPI
-from app.db.database import engine
+from app.api.routes import execute
+from app.api.routes import submit
+from app import models
+
 
 app = FastAPI()
+app.include_router(execute.router, prefix="/api", tags=["Execute"])
+app.include_router(submit.router, prefix="/api", tags=["Submit"])
 
-@app.on_event("startup")
-async def on_startup():
-    try:
-        async with engine.begin() as conn:
-            await conn.run_sync(lambda _: None)  # 연결 확인용 더미 쿼리
-        print("db 연결 성공")
-    except Exception as e:
-        print("db 연결 실패", e)

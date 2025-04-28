@@ -1,9 +1,10 @@
 fastapi
-"uvicorn[standard]"
+uvicorn[standard]
 sqlalchemy
 aiomysql
 python-dotenv
 pydantic
 alembic
-"pydantic[email]"
+pydantic[email]
 greenlet
+httpx
