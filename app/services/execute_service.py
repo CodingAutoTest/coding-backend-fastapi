@@ -42,14 +42,13 @@ async def execute_multiple_testcases(request: ExecuteRequest, db) -> ExecuteResp
         else:
             final_status = "Wrong Answer"
 
-        # 결과 저장
         results.append(ExecuteResult(
             testcase_id=testcase_id,
             stdout=user_stdout,
             stderr=judge0_result.get("stderr"),
             time=judge0_result.get("time", 0.0),
             memory=judge0_result.get("memory", 0),
-            status=final_status  # ⭐ 직접 판정한 status
+            status=final_status
         ))
 
     return ExecuteResponse(results=results)

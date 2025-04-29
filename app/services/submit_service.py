@@ -17,7 +17,7 @@ async def evaluate_submission(request: SubmitRequest, db) -> SubmitResponse:
 
     total = len(testcases)
     passed = 0
-    error_msg = None
+    error_msg = None 
 
     total_execution_time = 0.0
     max_memory_used = 0
@@ -30,22 +30,59 @@ async def evaluate_submission(request: SubmitRequest, db) -> SubmitResponse:
             cpu_time_limit=float(problem.time_limit),
             memory_limit=int(problem.memory_limit) * 1024
         )
-        output = result.get("stdout", "").strip()
-        if output == tc.output.strip():
-            passed += 1
-        elif result.get("stderr"):
-            error_msg = result["stderr"][:50]
+
+        output = (result.get("stdout") or "").strip()
+        expected_output = (tc.output or "").strip()
+        status_description = result.get("status", {}).get("description", "Unknown")
+        stderr = (result.get("stderr") or "").strip()
+        compile_output = (result.get("compile_output") or "").strip()
+
+        # 실행 성공했을 때
+        if status_description == "Accepted":
+            if output == expected_output:
+                error_msg = "Accepted"
+                passed += 1
+            else:
+                if error_msg is None:
+                    error_msg = "Wrong Answer"
+        else:
+            # 실행 실패했을 때 (에러가 있을 때)
+            if error_msg is None:
+                if "Compilation Error" in status_description or compile_output:
+                    if "SyntaxError" in compile_output:
+                        error_msg = "Syntax Error"
+                    elif "TypeError" in compile_output:
+                        error_msg = "Type Error"
+                    else:
+                        error_msg = "Compilation Error"
+                elif "Runtime Error" in status_description or stderr:
+                    if "ZeroDivisionError" in stderr:
+                        error_msg = "Zero Division Error"
+                    elif "IndexError" in stderr:
+                        error_msg = "Index Error"
+                    elif "KeyError" in stderr:
+                        error_msg = "Key Error"
+                    elif "ValueError" in stderr:
+                        error_msg = "Value Error"
+                    else:
+                        error_msg = "Runtime Error"
+                elif "Time Limit Exceeded" in status_description:
+                    error_msg = "Time Limit Exceeded"
+                elif "Memory Limit Exceeded" in status_description:
+                    error_msg = "Memory Limit Exceeded"
+                else:
+                    error_msg = status_description
 
         total_execution_time += float(result.get("time", 0.0))
         max_memory_used = max(max_memory_used, int(result.get("memory", 0)))
 
-    feedback_raw = await evaluate_code_with_openai(request.language, request.code)
+    # AI 피드백 생성
+    feedback_raw = await evaluate_code_with_openai(request.language, request.code, problem.description, problem.input_constraints, problem.output_constraints)
     feedback = AiFeedback(**feedback_raw)
-
     ai_feedback = AiFeedbackModel(**feedback_raw)
-    
     await save_feedback(db, ai_feedback)
 
+    # 제출 저장
     submission = UserSubmissionProblem(
         execution_time=total_execution_time,
         memory_used=max_memory_used,

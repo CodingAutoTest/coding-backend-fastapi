@@ -7,13 +7,16 @@ load_dotenv()
 
 openai.api_key = os.getenv("GPT_API_KEY")
 
-async def evaluate_code_with_openai(language: str, code: str) -> dict:
+async def evaluate_code_with_openai(language: str, code: str, description: str, input_constraints: str, output_constraints: str) -> dict:
     prompt = f"""
 아래는 사용자가 작성한 코드입니다.
 
-언어: {language}
+언어 : {language}
 
-코드:
+설명 : {description}
+입력 제약 조건 : {input_constraints}
+출력 제약 조건 : {output_constraints}
+사용자가 작성한 코드 :
 ---
 {code}
 ---
@@ -24,7 +27,7 @@ async def evaluate_code_with_openai(language: str, code: str) -> dict:
 3. 가독성 (Readability)
 4. 테스트 커버리지 (Test Coverage)
 
-그리고 코드 전반에 대한 피드백을 작성해주세요 현재 코드에서 바꿔야할 부분을 알려주며
+그리고 코드 전반에 대한 피드백을 작성해주세요 현재 코드에서 바꿔야할 부분을 사람들이 읽기 쉽게 가독성 높게 작성해주세요.
 
 결과는 다음 JSON 형식으로 반환해주세요:
 {{
