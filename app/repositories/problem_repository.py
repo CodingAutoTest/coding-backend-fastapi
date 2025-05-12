@@ -8,3 +8,6 @@ async def get_problem_by_id(db: AsyncSession, problem_id: int) -> Problem:
     )
     return result.scalars().first()
 
+async def save_problem(db: AsyncSession, problem: Problem):
+    db.add(problem)
+    await db.commit()

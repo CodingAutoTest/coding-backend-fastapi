@@ -3,17 +3,21 @@ from app.utils.judge0 import send_to_judge0
 from app.utils.openai_client import evaluate_code_with_openai
 from app.repositories.testcase_repository import get_testcases_by_problem_id
 from app.repositories.problem_repository import get_problem_by_id
+from app.repositories.user_repository import get_user_by_id, save_user
 from app.models.user_submission_problem import UserSubmissionProblem
 from app.models.ai_feedback import AiFeedback as AiFeedbackModel
 from sqlalchemy.future import select
 from app.repositories.language_repository import get_language_id_by_name
 from app.repositories.user_submission_problem_repository import save_submission
+from app.repositories.problem_repository import save_problem
 from app.repositories.ai_feedback_repository import save_feedback
 
 async def evaluate_submission(request: SubmitRequest, db) -> SubmitResponse:
     problem = await get_problem_by_id(db, request.problem_id)
     testcases = await get_testcases_by_problem_id(db, request.problem_id)
     language_id = await get_language_id_by_name(db, request.language)
+    user = await get_user_by_id(db, request.user_id)
+    difficulty = problem.difficulty
 
     total = len(testcases)
     passed = 0
@@ -42,6 +46,7 @@ async def evaluate_submission(request: SubmitRequest, db) -> SubmitResponse:
             if output == expected_output:
                 error_msg = "Accepted"
                 passed += 1
+                
             else:
                 if error_msg is None:
                     error_msg = "Wrong Answer"
@@ -81,12 +86,26 @@ async def evaluate_submission(request: SubmitRequest, db) -> SubmitResponse:
     feedback = AiFeedback(**feedback_raw)
     ai_feedback = AiFeedbackModel(**feedback_raw)
     await save_feedback(db, ai_feedback)
+    
+    # 문제 제출 카운트 업데이트
+    problem.submission_count += 1
 
+    # 문제 상태 설정
+    status = 0
+    if passed == total:
+        status = 1
+        # 문제 통과 시 맞춘 카운트 업데이트
+        problem.correct_count += 1
+        user.solved_count += 1
+        user.rating += int(difficulty * 10)
+
+    problem.acceptance_rate = (problem.correct_count / problem.submission_count) * 100
+        
     # 제출 저장
     submission = UserSubmissionProblem(
         execution_time=total_execution_time,
         memory_used=max_memory_used,
-        status=1,
+        status=status,
         submission_code=request.code,
         ai_feedback_id=ai_feedback.ai_feedback_id,
         language_id=language_id,
@@ -98,5 +117,9 @@ async def evaluate_submission(request: SubmitRequest, db) -> SubmitResponse:
     )
 
     await save_submission(db, submission)
-
+    
+    await save_problem(db, problem)
+    
+    await save_user(db, user)
+    
     return SubmitResponse(user_submission_problem_id=submission.user_submission_problem_id)

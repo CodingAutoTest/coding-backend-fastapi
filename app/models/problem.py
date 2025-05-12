@@ -18,3 +18,5 @@ class Problem(Base):
     updated_at = Column(TIMESTAMP, nullable=True)
     updated_by = Column(String(255), nullable=True)
     view_count = Column(Integer, nullable=False, default=0)
+    submission_count = Column(Integer, nullable=False, default=0)
+    correct_count = Column(Integer, nullable=False, default=0)
