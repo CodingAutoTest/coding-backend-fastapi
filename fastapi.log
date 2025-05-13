@@ -1,5 +1,101 @@
 nohup: ignoring input
-INFO:     Started server process [2395085]
+INFO:     Started server process [2648259]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-05-13 12:20:57,761 INFO sqlalchemy.engine.Engine SELECT DATABASE()
+2025-05-13 12:20:57,761 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-05-13 12:20:57,771 INFO sqlalchemy.engine.Engine SELECT @@sql_mode
+2025-05-13 12:20:57,771 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-05-13 12:20:57,772 INFO sqlalchemy.engine.Engine SELECT @@lower_case_table_names
+2025-05-13 12:20:57,772 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-05-13 12:20:57,773 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-05-13 12:20:57,777 INFO sqlalchemy.engine.Engine SELECT problem.problem_id, problem.acceptance_rate, problem.created_at, problem.created_by, problem.description, problem.difficulty, problem.input_constraints, problem.memory_limit, problem.output_constraints, problem.time_limit, problem.title, problem.updated_at, problem.updated_by, problem.view_count, problem.submission_count, problem.correct_count 
+FROM problem 
+WHERE problem.problem_id = %s
+2025-05-13 12:20:57,778 INFO sqlalchemy.engine.Engine [generated in 0.00022s] (1000,)
+2025-05-13 12:20:57,780 INFO sqlalchemy.engine.Engine SELECT testcase.testcase_id, testcase.created_at, testcase.created_by, testcase.input, testcase.output, testcase.updated_at, testcase.updated_by, testcase.problem_id 
+FROM testcase 
+WHERE testcase.problem_id = %s ORDER BY testcase.testcase_id ASC
+2025-05-13 12:20:57,780 INFO sqlalchemy.engine.Engine [generated in 0.00017s] (1000,)
+2025-05-13 12:20:57,783 INFO sqlalchemy.engine.Engine SELECT language.language_id, language.name 
+FROM language 
+WHERE language.name = %s
+2025-05-13 12:20:57,783 INFO sqlalchemy.engine.Engine [generated in 0.00019s] ('python',)
+2025-05-13 12:20:57,785 INFO sqlalchemy.engine.Engine SELECT user.user_id, user.email, user.pw, user.premium_status, user.name, user.last_login, user.solved_count, user.rating, user.profile_image, user.background_image, user.`role` 
+FROM user 
+WHERE user.user_id = %s
+2025-05-13 12:20:57,785 INFO sqlalchemy.engine.Engine [generated in 0.00019s] (125,)
+2025-05-13 12:20:57,789 INFO sqlalchemy.engine.Engine SELECT user_submission_problem.user_submission_problem_id, user_submission_problem.created_at, user_submission_problem.created_by, user_submission_problem.execution_time, user_submission_problem.memory_used, user_submission_problem.status, user_submission_problem.submission_code, user_submission_problem.updated_at, user_submission_problem.updated_by, user_submission_problem.ai_feedback_id, user_submission_problem.language_id, user_submission_problem.problem_id, user_submission_problem.user_id, user_submission_problem.passed_count, user_submission_problem.total_count, user_submission_problem.error 
+FROM user_submission_problem 
+WHERE user_submission_problem.user_id = %s AND user_submission_problem.problem_id = %s AND user_submission_problem.status = true 
+ LIMIT %s
+2025-05-13 12:20:57,789 INFO sqlalchemy.engine.Engine [generated in 0.00018s] (125, 1000, 1)
+2025-05-13 12:21:04,673 INFO sqlalchemy.engine.Engine INSERT INTO ai_feedback (accuracy, efficiency, feedback, readability, test_coverage) VALUES (%s, %s, %s, %s, %s)
+2025-05-13 12:21:04,673 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (10, 10, '코드는 정확하게 요구사항을 수행하고, 입력 받기 및 결과 출력 부분이 효율적으로 작성되어 있습니다. 가독성을 높이기 위해 코드에 주석을 추가하고 변수명을 좀 더 명확하게 지을 수 있습니다. 또한, 테스트 케이스를 추가하여 테스트 커버리지를 높일 수 있습니다.', 9, 8)
+2025-05-13 12:21:04,675 INFO sqlalchemy.engine.Engine UPDATE problem SET acceptance_rate=%s, submission_count=%s, correct_count=%s WHERE problem.problem_id = %s
+2025-05-13 12:21:04,675 INFO sqlalchemy.engine.Engine [generated in 0.00022s] (42.10526315789473, 57, 24, 1000)
+2025-05-13 12:21:04,677 INFO sqlalchemy.engine.Engine INSERT INTO user_submission_problem (created_by, execution_time, memory_used, status, submission_code, updated_at, updated_by, ai_feedback_id, language_id, problem_id, user_id, passed_count, total_count, error) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+2025-05-13 12:21:04,677 INFO sqlalchemy.engine.Engine [generated in 0.00022s] (None, 0.42600000000000027, 3644, 1, '# 입력 받기\nA, B = map(int, input().split())\n\n# A와 B를 더한 결과 출력\nprint(A + B)', None, None, 163, 71, 1000, 125, 30, 30, 'Accepted')
+2025-05-13 12:21:04,678 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     10.200.73.196:56407 - "POST /api/submit HTTP/1.1" 200 OK
+2025-05-13 12:22:44,696 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-05-13 12:22:44,696 INFO sqlalchemy.engine.Engine SELECT problem.problem_id, problem.acceptance_rate, problem.created_at, problem.created_by, problem.description, problem.difficulty, problem.input_constraints, problem.memory_limit, problem.output_constraints, problem.time_limit, problem.title, problem.updated_at, problem.updated_by, problem.view_count, problem.submission_count, problem.correct_count 
+FROM problem 
+WHERE problem.problem_id = %s
+2025-05-13 12:22:44,697 INFO sqlalchemy.engine.Engine [cached since 106.9s ago] (1000,)
+2025-05-13 12:22:44,698 INFO sqlalchemy.engine.Engine SELECT testcase.testcase_id, testcase.created_at, testcase.created_by, testcase.input, testcase.output, testcase.updated_at, testcase.updated_by, testcase.problem_id 
+FROM testcase 
+WHERE testcase.problem_id = %s ORDER BY testcase.testcase_id ASC
+2025-05-13 12:22:44,699 INFO sqlalchemy.engine.Engine [cached since 106.9s ago] (1000,)
+2025-05-13 12:22:44,700 INFO sqlalchemy.engine.Engine SELECT language.language_id, language.name 
+FROM language 
+WHERE language.name = %s
+2025-05-13 12:22:44,700 INFO sqlalchemy.engine.Engine [cached since 106.9s ago] ('python',)
+2025-05-13 12:22:44,701 INFO sqlalchemy.engine.Engine SELECT user.user_id, user.email, user.pw, user.premium_status, user.name, user.last_login, user.solved_count, user.rating, user.profile_image, user.background_image, user.`role` 
+FROM user 
+WHERE user.user_id = %s
+2025-05-13 12:22:44,701 INFO sqlalchemy.engine.Engine [cached since 106.9s ago] (125,)
+2025-05-13 12:22:44,703 INFO sqlalchemy.engine.Engine SELECT user_submission_problem.user_submission_problem_id, user_submission_problem.created_at, user_submission_problem.created_by, user_submission_problem.execution_time, user_submission_problem.memory_used, user_submission_problem.status, user_submission_problem.submission_code, user_submission_problem.updated_at, user_submission_problem.updated_by, user_submission_problem.ai_feedback_id, user_submission_problem.language_id, user_submission_problem.problem_id, user_submission_problem.user_id, user_submission_problem.passed_count, user_submission_problem.total_count, user_submission_problem.error 
+FROM user_submission_problem 
+WHERE user_submission_problem.user_id = %s AND user_submission_problem.problem_id = %s AND user_submission_problem.status = true 
+ LIMIT %s
+2025-05-13 12:22:44,703 INFO sqlalchemy.engine.Engine [cached since 106.9s ago] (125, 1000, 1)
+2025-05-13 12:22:51,317 INFO sqlalchemy.engine.Engine INSERT INTO ai_feedback (accuracy, efficiency, feedback, readability, test_coverage) VALUES (%s, %s, %s, %s, %s)
+2025-05-13 12:22:51,317 INFO sqlalchemy.engine.Engine [cached since 106.6s ago] (10, 10, '현재 작성된 코드는 정확하고 효율적입니다. 가독성을 위해 변수명을 더 명확하게 지을 수 있고, 주석을 추가하여 코드를 이해하기 쉽게 할 수 있습니다. 또한, 테스트 케이스를 추가하여 코드의 안정성을 높일 수 있습니다.', 8, 7)
+2025-05-13 12:22:51,319 INFO sqlalchemy.engine.Engine UPDATE problem SET acceptance_rate=%s, submission_count=%s, correct_count=%s WHERE problem.problem_id = %s
+2025-05-13 12:22:51,319 INFO sqlalchemy.engine.Engine [cached since 106.6s ago] (43.103448275862064, 58, 25, 1000)
+2025-05-13 12:22:51,321 INFO sqlalchemy.engine.Engine INSERT INTO user_submission_problem (created_by, execution_time, memory_used, status, submission_code, updated_at, updated_by, ai_feedback_id, language_id, problem_id, user_id, passed_count, total_count, error) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+2025-05-13 12:22:51,321 INFO sqlalchemy.engine.Engine [cached since 106.6s ago] (None, 0.42000000000000026, 3776, 1, '# 입력 받기\nA, B = map(int, input().split())\n\n# A와 B를 더한 결과 출력\nprint(A + B)', None, None, 164, 71, 1000, 125, 30, 30, 'Accepted')
+2025-05-13 12:22:51,322 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     10.200.73.196:57727 - "POST /api/submit HTTP/1.1" 200 OK
+2025-05-13 12:24:45,862 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-05-13 12:24:45,863 INFO sqlalchemy.engine.Engine SELECT problem.problem_id, problem.acceptance_rate, problem.created_at, problem.created_by, problem.description, problem.difficulty, problem.input_constraints, problem.memory_limit, problem.output_constraints, problem.time_limit, problem.title, problem.updated_at, problem.updated_by, problem.view_count, problem.submission_count, problem.correct_count 
+FROM problem 
+WHERE problem.problem_id = %s
+2025-05-13 12:24:45,863 INFO sqlalchemy.engine.Engine [cached since 228.1s ago] (1000,)
+2025-05-13 12:24:45,865 INFO sqlalchemy.engine.Engine SELECT testcase.testcase_id, testcase.created_at, testcase.created_by, testcase.input, testcase.output, testcase.updated_at, testcase.updated_by, testcase.problem_id 
+FROM testcase 
+WHERE testcase.problem_id = %s ORDER BY testcase.testcase_id ASC
+2025-05-13 12:24:45,865 INFO sqlalchemy.engine.Engine [cached since 228.1s ago] (1000,)
+2025-05-13 12:24:45,867 INFO sqlalchemy.engine.Engine SELECT language.language_id, language.name 
+FROM language 
+WHERE language.name = %s
+2025-05-13 12:24:45,867 INFO sqlalchemy.engine.Engine [cached since 228.1s ago] ('python',)
+2025-05-13 12:24:45,868 INFO sqlalchemy.engine.Engine SELECT user.user_id, user.email, user.pw, user.premium_status, user.name, user.last_login, user.solved_count, user.rating, user.profile_image, user.background_image, user.`role` 
+FROM user 
+WHERE user.user_id = %s
+2025-05-13 12:24:45,868 INFO sqlalchemy.engine.Engine [cached since 228.1s ago] (125,)
+2025-05-13 12:24:45,869 INFO sqlalchemy.engine.Engine SELECT user_submission_problem.user_submission_problem_id, user_submission_problem.created_at, user_submission_problem.created_by, user_submission_problem.execution_time, user_submission_problem.memory_used, user_submission_problem.status, user_submission_problem.submission_code, user_submission_problem.updated_at, user_submission_problem.updated_by, user_submission_problem.ai_feedback_id, user_submission_problem.language_id, user_submission_problem.problem_id, user_submission_problem.user_id, user_submission_problem.passed_count, user_submission_problem.total_count, user_submission_problem.error 
+FROM user_submission_problem 
+WHERE user_submission_problem.user_id = %s AND user_submission_problem.problem_id = %s AND user_submission_problem.status = true 
+ LIMIT %s
+2025-05-13 12:24:45,869 INFO sqlalchemy.engine.Engine [cached since 228.1s ago] (125, 1000, 1)
+2025-05-13 12:24:52,721 INFO sqlalchemy.engine.Engine INSERT INTO ai_feedback (accuracy, efficiency, feedback, readability, test_coverage) VALUES (%s, %s, %s, %s, %s)
+2025-05-13 12:24:52,721 INFO sqlalchemy.engine.Engine [cached since 228s ago] (10, 10, '코드는 정확하고 효율적으로 작성되었습니다. 가독성이 높은 코드이나, 변수명을 좀 더 명확하게 지으면 더 좋을 것 같습니다. 또한, 테스트 케이스를 더 다양하게 추가하여 테스트 커버리지를 높이는 것이 좋겠습니다.', 9, 8)
+2025-05-13 12:24:52,724 INFO sqlalchemy.engine.Engine UPDATE problem SET acceptance_rate=%s, submission_count=%s, correct_count=%s WHERE problem.problem_id = %s
+2025-05-13 12:24:52,725 INFO sqlalchemy.engine.Engine [cached since 228s ago] (44.06779661016949, 59, 26, 1000)
+2025-05-13 12:24:52,726 INFO sqlalchemy.engine.Engine INSERT INTO user_submission_problem (created_by, execution_time, memory_used, status, submission_code, updated_at, updated_by, ai_feedback_id, language_id, problem_id, user_id, passed_count, total_count, error) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+2025-05-13 12:24:52,726 INFO sqlalchemy.engine.Engine [cached since 228s ago] (None, 0.41600000000000026, 3768, 1, '# 입력 받기\nA, B = map(int, input().split())\n\n# A와 B를 더한 결과 출력\nprint(A + B)', None, None, 165, 71, 1000, 125, 30, 30, 'Accepted')
+2025-05-13 12:24:52,726 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     10.200.73.196:59210 - "POST /api/submit HTTP/1.1" 200 OK
