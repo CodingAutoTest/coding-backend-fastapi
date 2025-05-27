@@ -6,7 +6,7 @@ class UserSubmissionProblem(Base):
 
     user_submission_problem_id = Column(Integer, primary_key=True, index=True)
     created_at = Column(TIMESTAMP, server_default=func.now())
-    created_by = Column(String(255), nullable=True)
+    created_by = Column(Integer)
     execution_time = Column(DECIMAL(5, 2))
     memory_used = Column(Integer)
     status = Column(Integer)
