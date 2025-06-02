@@ -19,4 +19,6 @@ class UserSubmissionProblem(Base):
     user_id = Column(Integer, ForeignKey("user.user_id"))
     passed_count = Column(Integer)
     total_count = Column(Integer)
-    error = Column(Text)
+    judge0_status = Column(Text)
+    judge0_stderr = Column(Text)
+    
